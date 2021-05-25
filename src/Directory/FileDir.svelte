@@ -2,17 +2,21 @@
     import FileTest from './FileTest.svelte';    
     import { onMount, onDestroy} from 'svelte';
     import DirectoryData from '../Utilities/DirectoryStore';
+import App from '../App.svelte';
     let savedTree = [];
+    const fs = require('fs');
     var remote = window.require('electron').remote;
     var electronFs = remote.require('fs');
     const {ipcRenderer} = require('electron');
 
     
     let directory;
+    let stateObj;
 
     const unsub = DirectoryData.subscribe(data =>{
         console.log('File Directory Store Subscription');
         console.log('data',data);
+        stateObj = data.stateObj;
     });
 
     // store 
@@ -36,7 +40,10 @@
                     return b.items.length - a.items.length;
                 })
                 DirectoryData.update(currentData =>{
-                    return savedTree;
+                    return {
+                        ...currentData,
+                        fileTree: savedTree
+                    }
                 })
                 //console.log(Array.isArray(savedTree))
                 console.log('fileTree',savedTree);
@@ -66,18 +73,58 @@
             this.items = FileTree.readDir(this.path,'',0);
         }
         static readDir(path) {
-            var fileArray = [];        
+            var fileArray = [];  
+                       
             
             electronFs.readdirSync(path).forEach(file => {
+
                 var fileInfo = new FileTree(`${path}/${file}`, file);
                 var stat = electronFs.statSync(fileInfo.path);
+                //let extenstion = file.split('.').pop();
+                
+                if (file.split('.').pop() === 'svelte'){
+                    var content = fs.readFileSync(`${path}/${file}`).toString();
+                    console.log('content', `${path}/${file}`);
+                    //split file
+                    var stateArr = [];
+                    var value = content.split(/\r?\n/);
+                    if(value !==[""]) {
+                        value.forEach( el => {
+                            console.log ('el', el)
+                            if(el) {                                
+                                //console.log('value[el]',value[el]);
+                                if(el.includes('export')){
+                                    el = el.split(' ');
+                                    console.log('el after split', el)
+                                    stateArr.push(el[6].replace(';',''));
+                                    console.log('Sucess finding export');
+                                    
+                                    stateObj[file] = stateArr;
+                                    
+                                }
+                            }
+                        })
+                    }
+                        //console.log('value of el,)
 
+                    
+                    console.log('file', file);
+                    
+                    
+                }
                 if (stat.isDirectory()){
                     fileInfo.items = FileTree.readDir(fileInfo.path);
                 }
 
                 fileArray.push(fileInfo);
-            })   
+            }) 
+            
+            DirectoryData.update(currentData =>{
+                       return {
+                           ...currentData,
+                            stateObj
+                        };
+            })
             return fileArray;
         }
     }
