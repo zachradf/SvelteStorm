@@ -12,10 +12,11 @@ import App from '../App.svelte';
     
     let directory;
     let stateObj;
+    let resultArr = [];
 
     const unsub = DirectoryData.subscribe(data =>{
-        console.log('File Directory Store Subscription');
-        console.log('data',data);
+        // console.log('File Directory Store Subscription');
+        // console.log('data',data);
         stateObj = data.stateObj;
     });
 
@@ -46,7 +47,7 @@ import App from '../App.svelte';
                     }
                 })
                 //console.log(Array.isArray(savedTree))
-                console.log('fileTree',savedTree);
+                // console.log('fileTree',savedTree);
             }
     })
 
@@ -73,58 +74,67 @@ import App from '../App.svelte';
             this.items = FileTree.readDir(this.path,'',0);
         }
         static readDir(path) {
-            var fileArray = [];  
-                       
+            var fileArray = [];                        
             
             electronFs.readdirSync(path).forEach(file => {
-
                 var fileInfo = new FileTree(`${path}/${file}`, file);
-                var stat = electronFs.statSync(fileInfo.path);
-                //let extenstion = file.split('.').pop();
+                var stat = electronFs.statSync(fileInfo.path);                
                 
                 if (file.split('.').pop() === 'svelte'){
                     var content = fs.readFileSync(`${path}/${file}`).toString();
-                    console.log('content', `${path}/${file}`);
-                    //split file
                     var stateArr = [];
                     var value = content.split(/\r?\n/);
                     if(value !==[""]) {
                         value.forEach( el => {
-                            console.log ('el', el)
-                            if(el) {                                
-                                //console.log('value[el]',value[el]);
-                                if(el.includes('export')){
-                                    el = el.split(' ');
-                                    console.log('el after split', el)
-                                    stateArr.push(el[6].replace(';',''));
-                                    console.log('Sucess finding export');
-                                    
-                                    stateObj[file] = stateArr;
-                                    
-                                }
+                            if(el && el.includes('export')) {                       
+                                el = el.replace(/\s/g, '');
+                                if(el.includes('exportlet')) el = el.replace('exportlet','');
+                                if(el.includes('exportconst')) el = el.replace('exportconst','');
+                                stateArr.push(el.replace(';',''));
+                                console.log('Sucess finding export');                                
+                                stateObj[file] = stateArr;                                 
                             }
+
+                            // let newStateArr = Object.keys(stateObj)
+                                                            
+                            // for(let x = 0; x < newStateArr.length; x++) {
+                            //     if (newStateArr[x].length > 1) {
+                            //         resultArr.push({file: newStateArr[x], state: stateObj[newStateArr[x]]})            
+                            //     }
+                            // }
+                            // resultArr = [...new Set(resultArr)]
+                            // //console.log('RESULT ARR', resultArr)
+                            // if (resultArr){
+                            // stateArr = { stateArr : resultArr};
+                            // console.log('stateArr', stateArr)
+                            // }
+                            DirectoryData.update(currentData =>{
+                                return {
+                                    ...currentData,
+                                       stateObj
+                                    };
+                            })
+                            
+                            
                         })
                     }
-                        //console.log('value of el,)
 
-                    
                     console.log('file', file);
                     
                     
                 }
+
+
                 if (stat.isDirectory()){
                     fileInfo.items = FileTree.readDir(fileInfo.path);
                 }
 
                 fileArray.push(fileInfo);
             }) 
+                     
             
-            DirectoryData.update(currentData =>{
-                       return {
-                           ...currentData,
-                            stateObj
-                        };
-            })
+
+            
             return fileArray;
         }
     }

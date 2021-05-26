@@ -5,19 +5,19 @@
     
     
     const unsub = DirectoryData.subscribe(data =>{
-        console.log('File Directory Store Subscription');
-        console.log('data',data);
+        // console.log('File Directory Store Subscription');
+        // console.log('data',data);
     });
 
     const toggleVisibility = (path) => {
         if(!fileState[path]) fileState[path]= true;
         else fileState[path] = false;
-        console.log('fileState',fileState);
+        // console.log('fileState',fileState);
     }
     console.log(fileTree)
 
     const dblClickHandler = (path) => {
-        console.log(`clicking now on ${path}`);  
+        // console.log(`clicking now on ${path}`);  
         const openFilePath = path;      
         DirectoryData.update(currentData =>{
                     return {...currentData,openFilePath,fileRead:true};

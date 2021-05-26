@@ -2,6 +2,7 @@
     //import Monaco from './components/monaco/monaco-editor.svelte';
     import FileDir from './Directory/FileDir.svelte'
     import Monaco from './MonacoComponents/Monaco.svelte'
+    import StateManager from './StateManager/StateManager.svelte'
     import { FitAddon } from 'xterm-addon-fit'
     import { onMount } from 'svelte';
     import './xterm.css';
@@ -126,7 +127,7 @@
 
       </div>
       <div class="box c">
-          <h1>State Manager</h1>
+          <StateManager />
       </div>
       <div on:click={onClick}  class="box d"> 
         {#if refreshed}
