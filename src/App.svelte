@@ -1,7 +1,9 @@
 <script>
-    import FileDir from './Directory/FileDir.svelte'
+    import FileDir from './Directory/FileDir.svelte'    
     import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
     import XTerm from './XTerm.svelte';
+    import StateManager from './StateManager/StateManager.svelte'
+   
     
     export let orientation = 'columns';
   
@@ -98,7 +100,7 @@
           <NewTabs class="childClass" {tabs} />
       </div>
       <div class="box c">
-          <h1>State Manager</h1>
+          <StateManager />
       </div>
       <div on:click={onClick}  class="box d"> 
         {#if refreshed}
@@ -113,3 +115,4 @@
   </main>
   </body>
 
+  Your local changes to the following files would be overwritten by merge
