@@ -1,23 +1,48 @@
 <script>
     import FileDir from './Directory/FileDir.svelte'    
     import NewTabs from './MonacoComponents/Tabs/NewTabs.svelte';
-    import XTerm from './XTerm.svelte';
+    import XTerm from './XTerm.svelte';    
     import StateManager from './StateManager/StateManager.svelte'
    
     
     export let orientation = 'columns';
+    let tabs = []
   
     let localhost = "http://localhost:5000/"
-    let refreshed = false;
+    let refreshed = false
+
     const { remote, ipcRenderer } = require('electron');
   
     function onClick() {
       refreshed = true
       localhost = "http://localhost:5000/"
     }
-  
-    let tabs = [];
-  
+
+
+  // onMount(() => {
+
+      
+
+  //      console.log('the component has mounted');
+  //      term.setOption('cursorStyle', 'block');
+  //      term.setOption('cursorBlink', true);
+  //      term.setOption('fontSize', 14);
+       
+  //      term.loadAddon(fitAddon);
+  //       term.open(document.getElementById('xterm'));
+  //       fitAddon.fit();
+
+  //       term.write('\x1b[32mWelcome to Svelte Storm!\x1b[m\r\n');
+
+  //       term.onData(e => {
+  //           ipcRenderer.send("terminal-into", e);
+  //       });
+
+  //       ipcRenderer.on('terminal-incData', (event, data) => {
+  //           term.write(data);
+  //       })
+  //   });
+
   </script>
   
   <style>
@@ -93,16 +118,16 @@
 
   <body class:orientation>
   <main class="wrapper" >
-      <div class="box a">
+      <div class="box a target">
           <FileDir />
       </div>
       <div class="box b">
           <NewTabs class="childClass" {tabs} />
       </div>
-      <div class="box c">
+      <div class="box c root">
           <StateManager />
       </div>
-      <div on:click={onClick}  class="box d"> 
+      <div on:click={onClick}  class="box d root"> 
         {#if refreshed}
         <iframe class="webpage" title="local host" src={localhost}></iframe>
         {:else}
@@ -112,6 +137,7 @@
       <div class="box e" > 
           <XTerm />
       </div>
+
   </main>
   </body>
 
