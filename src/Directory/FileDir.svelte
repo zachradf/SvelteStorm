@@ -1,7 +1,7 @@
 <script>  
     import FileTest from './FileTest.svelte';    
     import { onMount, onDestroy, afterUpdate} from 'svelte';
-    import DirectoryData from '../Utilities/DirectoryStore';
+    import { DirectoryData } from '../Utilities/DirectoryStore';
     const fs = require('fs');
     let savedTree = [];
     var remote = window.require('electron').remote;

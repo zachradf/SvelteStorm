@@ -1,6 +1,6 @@
 <script>   
 
-    import DirectoryData from '../Utilities/DirectoryStore';
+    import { DirectoryData } from '../Utilities/DirectoryStore';
     export let stateObj = {};
         
         const unsub = DirectoryData.subscribe(data =>{

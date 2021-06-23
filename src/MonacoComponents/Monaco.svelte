@@ -1,6 +1,7 @@
 <script>
-  import {  afterUpdate, onMount } from 'svelte';
+  import {  afterUpdate, onMount, onDestroy } from 'svelte';
   import * as monaco from 'monaco-editor';
+  import { initMonaco } from './MonacoEnv';
 
   const fs = require('fs');
   const { ipcRenderer } = require('electron');
@@ -14,13 +15,16 @@
   let containerElt;
 
   onMount(() => {
-    monEditor = monaco.editor.create(containerElt, {
+    const options = {
       value: value.join('\n'),
       language: language,
       theme: 'vs-dark',
       wordWrap: 'on',
       fontSize: "16px",
-    })
+    }
+    monEditor = initMonaco(containerElt, options)
+
+    // monEditor.setModel(monaco.editor.createModel(value, language));
   })
 
 	afterUpdate(() => {
@@ -31,10 +35,15 @@
           }
         })
         monEditor.onDidChangeModelContent(() => {
+          // monEditor.setModel(monaco.editor.createModel(monEditor.getValue(), language))
           console.log(monEditor.getValue())
-        })
-      }
+        }
+      )}
 	});
+
+  // onDestroy(() => {
+	// 	monEditor = monaco.editor.destroy()
+	// });
   
   ipcRenderer.on('save-markdown',  function () {
     messageObj = {content : monEditor.getValue(), file : filePath }
