@@ -1,7 +1,8 @@
 <script>
     import FileDir from './Directory/FileDir.svelte'
     import XTerm from './XTerm.svelte';
-    import StateManager from './StateManager/StateManager.svelte'
+    import StateManager from './StateManager/StateManager.svelte';
+    import Editor from './MonacoComponents/Editor.svelte';
     export let orientation = 'columns';
   
     let localhost = "http://localhost:5000/"
@@ -90,7 +91,7 @@
       </div>
       <div class="box b">
           <!-- svelte-ignore missing-declaration -->
-          <NewTabs class="childClass"/>
+          <Editor class="childClass"/>
       </div>
       <div class="box c root">
         <StateManager />

@@ -1,5 +1,5 @@
 <script>
-  import Monaco from '../Monaco.svelte';
+  import Monaco from './Monaco.svelte';
   import { DirectoryData, openTabs } from '../Utilities/DirectoryStore';
 
   const { remote, ipcRenderer } = require('electron');
@@ -10,7 +10,7 @@
   let activeTabValue = 0;
   let activeEditor = 0;
 
-  let value = ['This', 'is', 'SvelteStorm'];
+  let value = [''];
   let language = 'html';
   let [filePath, fileName, readData] = ['', '', ''];
   let title = 'Svelte Storm';
@@ -33,20 +33,10 @@
 
   function deleteTab(targetId) {
     $openTabs = $openTabs.filter((t) => t.tabId != targetId)
-    activeTabValue = activeTabValue - 1 || 0;
+    activeTabValue = (activeTabValue - 1) || 0;
     activeEditor = activeTabValue;
+    // value =$openTabs[(activeEditor)].editorValue)
   }
-
-  // const getIndex = (tab) => {
-  //   let ind; 
-  //   tabs.forEach((el, i) => { 
-  //     console.log(el.tabId, i, tab)
-  //     if (el.tabId === tab) {
-  //       ind = i;
-  //     }
-  //   });
-  //   return ind
-  // }
 
   const handleClick = (tabId) => () => {
     activeTabValue = tabId;
@@ -125,7 +115,7 @@
         <span
           class="delete-button" 
           value={tab.tabId}
-          on:click={(value) => deleteTab(tab.tabId)}
+          on:click={deleteTab(tab.tabId)}
         >
           &times
         </span>
@@ -142,6 +132,7 @@
           bind:language={$openTabs[(activeEditor)].editorLang}
           bind:filePath={$openTabs[(activeEditor)].filePath}
         />
+        {console.log(activeEditor)}
     </div>
   {/if}
 
