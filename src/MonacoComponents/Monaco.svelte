@@ -3,11 +3,11 @@
   import * as monaco from 'monaco-editor';
   // import { initMonaco } from './MonacoEnv';
   // /Users/samuelfilip/keepItSvelte/SvelteStorm/public/monaco-editor/esm/vs/editor/editor.worker.js
-  import { editorWorker } from '../../public/monaco-editor/esm/vs/editor/editor.worker';
-  import { jsonWorker } from '../../public/monaco-editor/esm/vs/language/json/json.worker.js';
-  import { cssWorker } from '../../public/monaco-editor/esm/vs/language/css/css.worker.js';
-  import { htmlWorker } from '../../public/monaco-editor/esm/vs/language/html/html.worker.js';
-  import { tsWorker } from '../../public/monaco-editor/esm/vs/language/typescript/ts.worker.js';
+  // import { editorWorker } from '../../public/monaco-editor/esm/vs/editor/editor.worker?worker';
+  // import { jsonWorker } from '../../public/monaco-editor/esm/vs/language/json/json.worker?worker';
+  // import { cssWorker } from '../../public/monaco-editor/esm/vs/language/css/css.worker?worker';
+  // import { htmlWorker } from '../../public/monaco-editor/esm/vs/language/html/html.worker?worker';
+  // import { tsWorker } from '../../public/monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 
   const fs = require('fs');
   const { ipcRenderer } = require('electron');
