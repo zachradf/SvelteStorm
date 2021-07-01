@@ -3,11 +3,11 @@
   import * as monaco from 'monaco-editor';
   // import { initMonaco } from './MonacoEnv';
   // /Users/samuelfilip/keepItSvelte/SvelteStorm/public/monaco-editor/esm/vs/editor/editor.worker.js
-  // import { editorWorker } from '../../public/monaco-editor/esm/vs/editor/editor.worker?worker';
-  // import { jsonWorker } from '../../public/monaco-editor/esm/vs/language/json/json.worker?worker';
-  // import { cssWorker } from '../../public/monaco-editor/esm/vs/language/css/css.worker?worker';
-  // import { htmlWorker } from '../../public/monaco-editor/esm/vs/language/html/html.worker?worker';
-  // import { tsWorker } from '../../public/monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+  import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+  import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
+  import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
+  import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
+  import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 
   const fs = require('fs');
   const { ipcRenderer } = require('electron');
@@ -30,7 +30,7 @@
     }
 
     if (!self.MonacoEnvironment) {
-      try {
+      
         self.MonacoEnvironment = {
           getWorker: function (_moduleId, label) {
           if (label === 'json') {
@@ -48,14 +48,11 @@
           return new editorWorker();
         }
       }
-      } catch(err) {
-        console.log(err)
-      }
     }
     
-    let Monaco = await import('monaco-editor')
+    
     // monEditor.setModel(monaco.editor.createModel(value, language));
-    monEditor = Monaco.editor.create(containerElt, opts)
+    monEditor = monaco.editor.create(containerElt, opts)
 
     return () => {
       monEditor.dispose();

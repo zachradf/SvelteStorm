@@ -108,7 +108,7 @@
       <span class="tab-span"
         on:click={handleClick(tab.tabId)}
       >
-        <img src="../src/icons/file_type_{tab.ext}.svg" 
+        <img src="../public/img/icons/file_type_{tab.ext}.svg" 
           alt={''}
         />
         {tab.fileName}

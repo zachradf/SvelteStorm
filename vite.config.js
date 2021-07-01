@@ -5,21 +5,39 @@ import MonacoEditorNlsPlugin, {
     Languages,
 } from 'vite-plugin-monaco-editor-nls';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import commonjs from '@rollup/plugin-commonjs';
+
 const PACKAGE_ROOT = __dirname;
 const prefix = `monaco-editor/esm/vs`;
-// const outDir = join(__dirname, 'src/index.js')
-// const renderDir = join(__dirname, 'index.js')
-// const publicDir = join(__dirname, 'public')
+
 // https://vitejs.dev/config/
 export default defineConfig({
+    server: {
+      open: false, // do not open the browser as we use electron
+      port: process.env.PORT || 5000,
+      fsServe: {
+        root: join(PACKAGE_ROOT, '../../'),
+      },
+    },
     root: resolve(PACKAGE_ROOT, 'public') + '/',
     base: '',
     plugins: [
         MonacoEditorNlsPlugin({locale: Languages.en_gb}),
-        svelte()
+        svelte({
+          emitCss: true
+        }),
+        commonjs()
     ],
     build: {
         sourcemap: true,
+        rollupOptions: {
+            output: {
+                sourcemap: true,
+                format: 'esm',
+                name: 'app',
+                dir: 'public',
+            },
+        }
     },
     resolve: {
         alias: {
@@ -27,15 +45,15 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        include: [
-            `${prefix}/editor/editor.worker`,
-            `${prefix}/language/json/json.worker.js`,
-            `${prefix}/language/css/css.worker.js`,
-            `${prefix}/language/html/html.worker.js`,
-            `${prefix}/language/typescript/ts.worker.js`,
-        ],
-        exclude: ['svelte-library'],
-        /** vite 版本需要大于等于2.3.0 */
+        // include: [
+        //     `${prefix}/editor/editor.worker`,
+        //     `${prefix}/language/json/json.worker.js`,
+        //     `${prefix}/language/css/css.worker.js`,
+        //     `${prefix}/language/html/html.worker.js`,
+        //     `${prefix}/language/typescript/ts.worker.js`,
+        // ],
+        exclude: ['path', 'electron-window-state'],
+        /** requires vite >= 2.3.0 */
         esbuildOptions: {
             plugins: [
                 esbuildPluginMonacoEditorNls({
@@ -44,5 +62,4 @@ export default defineConfig({
             ],
         },
     },
-   
 });
