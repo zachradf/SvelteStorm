@@ -45,13 +45,13 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        // include: [
-        //     `${prefix}/editor/editor.worker`,
-        //     `${prefix}/language/json/json.worker.js`,
-        //     `${prefix}/language/css/css.worker.js`,
-        //     `${prefix}/language/html/html.worker.js`,
-        //     `${prefix}/language/typescript/ts.worker.js`,
-        // ],
+        include: [
+            `${prefix}/editor/editor.worker`,
+            `${prefix}/language/json/json.worker.js`,
+            `${prefix}/language/css/css.worker.js`,
+            `${prefix}/language/html/html.worker.js`,
+            `${prefix}/language/typescript/ts.worker.js`,
+        ],
         exclude: ['path', 'electron-window-state'],
         /** requires vite >= 2.3.0 */
         esbuildOptions: {
